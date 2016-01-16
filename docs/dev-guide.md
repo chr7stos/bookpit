@@ -71,16 +71,7 @@ Dependencies
 * psycopg2
 * python3-dev
 * virtualenv
-
-HowTo run for the first time
-----------------------------
-
-- virtualenv -p `which python3` virt/
-- source ./virt/bin/activate
-- pip install -r requirements.txt
-- export PYTHONPATH=/path/to/bookpit:$PYTHONPATH
-- python ./bin/run.py
-
+* requirements.txt
 
 ## Setting-up a development environment
 
