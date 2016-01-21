@@ -1,0 +1,18 @@
+#!/bin/bash
+
+cat << EOT
+
+Run the webapp:
+===============
+
+cd /opt/bookpit
+bin/run
+
+Other infos:
+============
+
+Navigate the webapp in your browser at http://localhost:5000
+
+EOT
+
+sudo docker run -i -t -p 5000:5000 -v `pwd`:/opt/bookpit bookpit bash
