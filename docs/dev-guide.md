@@ -2,16 +2,6 @@
 
 This is the Developer's Guide to the Galaxy.
 
-## Flask config
-
-Make sure the Python interpreter can find bookpit's Python modules:
-
-    $ export PYTHONPATH=`pwd`/bookpit:"$PYTHONPATH"
-    $ python -c 'import bookpit'  # if this fails, double-check $PYTHONPATH
-
-Using this you can import the bookpit files from anywhere. If bin/run.py
-fails because of the import, then you haven't set the Python path correctly.
-
 ## Git conventions
 
 **IMPORTANT:** Before your first commit, make sure that you have defined your
@@ -60,27 +50,24 @@ fine by inspecting the 'git log' output.
   - The third line (or next lines) could have arbitrary text but the lines
   should have at most 72 characters.
 
-(Linus said
-[everything](https://github.com/torvalds/linux/pull/17#issuecomment-5659933)!)
 
+## Code conventions
 
-Dependencies
-------------
+* Please provide tests for your work
+* Use flake8 to validate code before PR
+* make sure the code doesn't break existing tests.
 
-* Python >= 3.3
-* psycopg2
-* python3-dev
-* virtualenv
-* requirements.txt
 
 ## Setting-up a development environment
+
+### Local install using virtual environment
 
 In Python we tend to work inside a sandbox'ed environment in order to avoid the
 dependency hell that might come of! There are various tutorials on how to setup
 the best/coolest/you-name-it virtualenv. The quick-and-dirty way is:
 
-    # apt-get install python-setuptools postgresql-9.5 python-psycopg2 python-nose python-nose2-cov
-    # easy_install virtualenv
+    # apt-get install python-setuptools postgresql-9.5 python3-psycopg2 python3-nose python3-nose2-cov
+    install virtualenv (pip easy_install or apt-get)
     $ mkdir ~/virt_env
     $ virtualenv -p `which python3` ~/virt_env/bookpit
 
@@ -89,7 +76,7 @@ Activating the virtualenv:
     $ source ~/virt_env/bookpit/bin/activate
     (bookpit) $
 
-Install requirementsin the virtual environment (using Python 3), e.g.
+Install requirements in the virtual environment (using Python 3), e.g.
 
     $ pip install -r requirements.txt
 
@@ -105,7 +92,7 @@ If you want to deactivate the current environment:
     (bookpit) $ deactivate
     $
 
-## Creating the databases
+#### Creating the databases
 
 In order to be able to use the bookpit app you have to setup a Postgres
 database.
@@ -120,11 +107,22 @@ database.
 3. Create and populate databases:
    - TODO
 
+#### Flask config
 
-## TODO
+Make sure the Python interpreter can find bookpit's Python modules:
 
-You should probably have a look at the TODO list on trello: 
-https://trello.com/b/Y3iVslSU/vivlia-omorfa
+    $ export PYTHONPATH=`pwd`/bookpit:"$PYTHONPATH"
+    $ python -c 'import bookpit'  # if this fails, double-check $PYTHONPATH
+
+Using this you can import the bookpit files from anywhere. If bin/run.py
+fails because of the import, then you haven't set the Python path correctly.
+
+
+### Docker
+
+You just need to run bin/bookpit-docker-build to create the image and then
+bin/bookpit-docker-run to run it and start hacking.
+
 
 ## Translations
 
