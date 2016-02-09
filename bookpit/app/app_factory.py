@@ -1,12 +1,13 @@
-""" Copyright (C) 2016  Chris Christodoulou <chris.christodoulou@gmail.com>
-                        Orestis Ioannou <orestis@oioannou.com>
-
-This file is part of bookpit. bookpit is free software: you can
-redistribute it and/or modify it under the terms of the GNU  Affero General
-Public License as published by the Free Software Foundation, either version 3
-of the License, or (at your option) any later version. For more information
-see the COPYING file at the top-level directory """
+# Copyright (C) 2016  Chris Christodoulou <chris.christodoulou@gmail.com>
+#                        Orestis Ioannou <orestis@oioannou.com>
+#
+# This file is part of bookpit. bookpit is free software: you can
+# redistribute it and/or modify it under the terms of the GNU  Affero General
+# Public License as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version. For more information
+# see the COPYING file at the top-level directory
 #  -*- coding: utf-8 -*-
+"""Application factory containing the config and apps."""
 import configparser
 import os
 
@@ -30,13 +31,11 @@ PROBABLE_CONF_FILES = [
 
 
 class AppWrapper(object):
-    """
-    Contains an app and a session, and provides ways to drive all the init
-    steps separately.
-    """
+    """Wrapper for apps and session."""
+
     def __init__(self, session=None):
-        """
-        Creates a Flask application and sets up its configuration.
+        """Create a Flask application and sets up its configuration.
+
         If config and/or session are provided, they will overload the
         default behavior.
         """
@@ -44,7 +43,7 @@ class AppWrapper(object):
         self.app = Flask(__name__)
 
     def set_db(self):
-        """ Reads config and sets up session and engine """
+        """Read config and set up session and engine."""
         config = configparser.ConfigParser()
         conf_file = guess_conffile()
         config.read(conf_file)
@@ -55,8 +54,9 @@ class AppWrapper(object):
             self.setup_sqlalchemy()
 
     def go(self):
-        """
-        Sets up SQLAlchemy, logging, and imports all the views.
+        """Set up the necessary apps and run app.
+
+        Set up SQLAlchemy, logging, and imports all the views.
         After creating an AppWrapper and calling this method, the app is ready.
         """
         # read conf
@@ -81,18 +81,14 @@ class AppWrapper(object):
         self.db = SQLAlchemy(self.app)
 
     def setup_sqlalchemy(self):
-        """
-        Creates an engine and a session for SQLAlchemy, using the database URI
-        in the configuration.
-        """
+        """Create an engine and a session for SQLAlchemy."""
         self.app.config['SQLALCHEMY_DB_URI'] = self.conf["DEFAULT"]['db_uri']
         db_uri = self.app.config['SQLALCHEMY_DB_URI']
         eng, ses = _get_engine_session(db_uri, verbose=False)
         self.engine, self.session = eng, ses
 
     def setup_mail(self):
-        """ Sets up flask-mail configuration based on the config file
-        """
+        """Set up flask-mail configuration based on the config file."""
         self.app.config["MAIL_SERVER"] = self.conf['MAIL']['smtp']
         self.app.config["MAIL_PORT"] = self.conf['MAIL']['port']
         self.app.config["MAIL_USE_TLS"] = self.conf['MAIL']['tls']
@@ -100,15 +96,12 @@ class AppWrapper(object):
         self.app.config["MAIL_PASSWORD"] = self.conf['MAIL']['password']
 
     def setup_blueprints(self):
-        """
-        Sets up admin and events blueprints
-        """
+        """Set up admin and events blueprints."""
         self.admin = Admin(self.app)
 
 
 def guess_conffile():
-    """ returns the first probable configuration file, that exists and is not
-    empty, and raises Exception if nothing is found """
+    """Find the conffile."""
     for conffile in PROBABLE_CONF_FILES:
         if os.path.exists(conffile):
             if os.stat(conffile).st_size:  # file is not empty
